@@ -94,6 +94,11 @@ class ChangePassword extends Component {
         if (!this.state["cnfpassword"]) {
             formIsValid = false;
             errors["cnfpassword"] = "*Please enter your confirm password.";
+		}
+		
+		if (this.state["newpassword"] !== this.state["cnfpassword"]) {
+            formIsValid = false;
+            errors["cnfpassword"] = "*password doesn't match";
         }
 
 		this.setState({
