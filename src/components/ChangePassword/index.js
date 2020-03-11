@@ -8,7 +8,7 @@ class ChangePassword extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			ExternalAction: 'AsignOn',
+			ExternalAction: 'AchangePW',
             username: '',
             oldpassword: '',
             newpassword: '',
@@ -39,8 +39,12 @@ class ChangePassword extends Component {
 					ExternalAction: this.state.ExternalAction,
 					username: this.state.username,
                     password: this.state.oldpassword,
-                    newpassword: this.state.newpassword,
-                    confirmpassword: this.state.cnfpassword
+                    new: {
+						password: this.state.newpassword
+					},
+                    confirm: {
+						password: this.state.cnfpassword
+					}
 				}
 			});
 			console.log(returnData);
@@ -50,11 +54,7 @@ class ChangePassword extends Component {
                 });
                 
 				this.setState({
-					res_error: returnData.data.Msgs,
-					username: '',
-                    oldpassword: '',
-                    newpassword: '',
-                    cnfpassword: ''
+					res_error: returnData.data.Msgs
 				})
 			}else{
                 this.setState({
