@@ -58,7 +58,11 @@ class ChangePassword extends Component {
 				})
 			}else{
                 this.setState({
-					loaded: false
+					loaded: false,
+					username: '',
+                    oldpassword: '',
+                    newpassword: '',
+                    cnfpassword: ''
                 });
             }
 		}else{

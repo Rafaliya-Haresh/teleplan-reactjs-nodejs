@@ -1,6 +1,6 @@
 
-// export const NODE_APPLICATION_URL = 'http://localhost:5000';
-export const NODE_APPLICATION_URL = 'https://teleplan.herokuapp.com';
+export const NODE_APPLICATION_URL = 'http://localhost:5000';
+//export const NODE_APPLICATION_URL = 'https://teleplan.herokuapp.com';
 
 export function rxAjax(action) {
   const errors = [];
