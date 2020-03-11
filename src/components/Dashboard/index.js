@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import Header from '../Header';
 import './Dashboard.css';
+import ChangePassword from '../ChangePassword';
+import { rxAjax, NODE_APPLICATION_URL } from '../../utils';
 
 class Dashboard extends Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      ExternalAction: 'AsignOff'
+    }
+  }
   isActiveToggle(step){
     let tabPaneArr = document.getElementsByClassName('tab-pane');
     for (var i = 0; i < tabPaneArr.length; i++) {
@@ -18,9 +26,20 @@ class Dashboard extends Component {
     document.querySelector('.list-group-item.list-group-item-action.'+ step).classList.add('active');
   }
 
-  signOff(){
-    localStorage.removeItem('user');
-    this.props.history.push('/');
+  async signOff(){
+    const returnData = await rxAjax({
+      method: 'POST',
+      endpoint: NODE_APPLICATION_URL+'/signoff',
+      payload: {
+        ExternalAction: this.state.ExternalAction
+      }
+    });
+    if(returnData.data.Result !== 'SUCCESS'){
+
+    }else{
+      localStorage.removeItem('user');
+      this.props.history.push('/');    
+    }
   }
 
   render() {
@@ -45,7 +64,7 @@ class Dashboard extends Component {
                 </div>
                 
                 <div className="tab-pane" id="change-password">
-                  ...
+                  <ChangePassword/> 
                 </div>
 
               </div>
