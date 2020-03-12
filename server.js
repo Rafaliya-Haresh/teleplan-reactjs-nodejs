@@ -3,8 +3,12 @@ var session = require('express-session');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
+var cookieParser = require('cookie-parser')
 var multer  = require('multer');
 var path = require('path');
+var APPLICATION_URL = 'https://tlpt2.moh.hnet.bc.ca';
+
+// File upload
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './uploads')
@@ -14,11 +18,20 @@ var storage = multer.diskStorage({
     }
 })
 var upload = multer({ storage: storage }).single('file');
+app.use(cookieParser());
+app.use(session({
+  key: 'JSESSIONID',
+  secret: 'somerandonstuffs',
+  resave: false,
+  saveUninitialized: false,
+}));
 
-
-var APPLICATION_URL = 'https://tlpt2.moh.hnet.bc.ca';
-
-app.use(session({secret: 'tele',saveUninitialized: true,resave: true}));
+app.use((req, res, next) => {
+  if (req.cookies.JSESSIONID && !req.session.user) {
+      res.clearCookie('JSESSIONID');        
+  }
+  next();
+});
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
@@ -50,6 +63,7 @@ app.post('/login', function (req, res) {
       if(err){
         return res.status(500).json(err);
       }
+      req.session.user = body;
       var string = body.split(';');
       var obj = {
         Result: string[1].split('=')[1],
@@ -85,7 +99,6 @@ app.post('/change-password', function (req, res) {
 
 // Sign off
 app.post('/signoff', function (req, res) {
-
   const options = {
     url: APPLICATION_URL+'/TeleplanBroker',
     form: req.body,

@@ -91,10 +91,10 @@ class ChangePassword extends Component {
             errors["cnfpassword"] = "*Please enter your confirm password.";
 		}
 		
-		// if (this.state["newpassword"] !== this.state["cnfpassword"]) {
-        //     formIsValid = false;
-        //     errors["cnfpassword"] = "*password doesn't match";
-        // }
+		if (this.state["newpassword"] !== this.state["cnfpassword"]) {
+            formIsValid = false;
+            errors["cnfpassword"] = "*password doesn't match";
+        }
 
 		this.setState({
 		  errors: errors,
@@ -107,6 +107,7 @@ class ChangePassword extends Component {
 	  return (
 		<div>
         	<div className="container">
+				<h4>Change Password</h4>
 				<div className="row">
 					<div className="col-lg-12">
 						<div className="card">

@@ -53,7 +53,7 @@ class Dashboard extends Component {
               <div className="list-group" id="list-tab" role="tablist">
                 <div className="list-group-item list-group-item-action home active" onClick={()=>this.isActiveToggle('home')}>Home</div>
                 <div className="list-group-item list-group-item-action change-password"  onClick={()=>this.isActiveToggle('change-password')}>Change Password</div>
-                <div className="list-group-item list-group-item-action log"  onClick={()=>this.isActiveToggle('log')}>Log</div>
+                <div className="list-group-item list-group-item-action log"  onClick={()=>this.isActiveToggle('log')}>Other Processing + Logs</div>
                 <div className="list-group-item list-group-item-action"  onClick={()=>this.signOff()}>Sign off</div>
               </div>
             </div>
@@ -63,6 +63,8 @@ class Dashboard extends Component {
                 <div className="tab-pane active"  id="home">
                   <h4>Welcome to MSP's Teleplan Web  Access</h4>
                   <p>Welcome to the home page of the BC Medical Service Plan (MSP) <br/> Electronic Claims Submission web application.</p>
+                  <p>Version: Teleplan Web 4.2.8</p>
+                  <p>Use the menu at the left to select the service you would like to access</p>
                 </div>
                 
                 <div className="tab-pane" id="change-password">

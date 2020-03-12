@@ -107,6 +107,7 @@ class GetLog extends Component {
 	  return (
 		<div>
         	<div className="container">
+				<h4>Other Processing: View Log History</h4>
 				<div className="row">
 					<div className="col-lg-12">
 						<div className="card">
