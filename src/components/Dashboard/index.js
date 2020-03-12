@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from '../Header';
 import './Dashboard.css';
 import ChangePassword from '../ChangePassword';
+import GetLog from '../GetLog';
 import { rxAjax, NODE_APPLICATION_URL } from '../../utils';
 
 class Dashboard extends Component {
@@ -52,6 +53,7 @@ class Dashboard extends Component {
               <div className="list-group" id="list-tab" role="tablist">
                 <div className="list-group-item list-group-item-action home active" onClick={()=>this.isActiveToggle('home')}>Home</div>
                 <div className="list-group-item list-group-item-action change-password"  onClick={()=>this.isActiveToggle('change-password')}>Change Password</div>
+                <div className="list-group-item list-group-item-action log"  onClick={()=>this.isActiveToggle('log')}>Log</div>
                 <div className="list-group-item list-group-item-action"  onClick={()=>this.signOff()}>Sign off</div>
               </div>
             </div>
@@ -65,6 +67,10 @@ class Dashboard extends Component {
                 
                 <div className="tab-pane" id="change-password">
                   <ChangePassword/> 
+                </div>
+
+                <div className="tab-pane" id="log">
+                  <GetLog/> 
                 </div>
 
               </div>

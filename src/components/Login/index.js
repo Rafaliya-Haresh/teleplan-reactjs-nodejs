@@ -40,7 +40,7 @@ class Login extends Component {
 					password: this.state.password
 				}
 			});
-			console.log(returnData);
+			console.log("SignOn ", returnData);
 			if(returnData.data.Result !== 'SUCCESS'){
 				this.setState({
 					loaded: false
@@ -108,7 +108,7 @@ class Login extends Component {
 									</div>
 									<button type="submit" className="btn btn-primary" disabled={this.state.loaded}>
 									{this.state.loaded && <Loader/>}
-									Submit</button>
+									Login</button>
 								</form>
 							</div>
 						</div>

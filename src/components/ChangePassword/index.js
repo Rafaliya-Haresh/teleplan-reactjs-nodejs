@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './ChangePassword.css';
 import { rxAjax, NODE_APPLICATION_URL } from '../../utils';
 import Loader from '../../container/Loader';
 
@@ -36,18 +35,14 @@ class ChangePassword extends Component {
 				method: 'POST',
 				endpoint: NODE_APPLICATION_URL+'/change-password',
 				payload: {
-					ExternalAction: this.state.ExternalAction,
-					username: this.state.username,
-                    password: this.state.oldpassword,
-                    new: {
-						password: this.state.newpassword
-					},
-                    confirm: {
-						password: this.state.cnfpassword
-					}
+					"ExternalAction": this.state.ExternalAction,
+					"username": this.state.username,
+                    "password": this.state.oldpassword,
+                    "new.password": this.state.newpassword,
+                    "confirm.password": this.state.cnfpassword
 				}
 			});
-			console.log(returnData);
+			console.log("Change Password ", returnData);
 			if(returnData.data.Result !== 'SUCCESS'){
 				this.setState({
 					loaded: false
@@ -96,10 +91,10 @@ class ChangePassword extends Component {
             errors["cnfpassword"] = "*Please enter your confirm password.";
 		}
 		
-		if (this.state["newpassword"] !== this.state["cnfpassword"]) {
-            formIsValid = false;
-            errors["cnfpassword"] = "*password doesn't match";
-        }
+		// if (this.state["newpassword"] !== this.state["cnfpassword"]) {
+        //     formIsValid = false;
+        //     errors["cnfpassword"] = "*password doesn't match";
+        // }
 
 		this.setState({
 		  errors: errors,

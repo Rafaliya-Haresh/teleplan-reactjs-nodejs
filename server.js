@@ -60,8 +60,9 @@ app.post('/login', function (req, res) {
     });
 });
 
-app.post('/change-password', function (req, res) {
 
+// Change password
+app.post('/change-password', function (req, res) {
     const options = {
       url: APPLICATION_URL+'/TeleplanBroker',
       form: req.body,
@@ -81,6 +82,8 @@ app.post('/change-password', function (req, res) {
     });
 });
 
+
+// Sign off
 app.post('/signoff', function (req, res) {
 
   const options = {
@@ -101,6 +104,55 @@ app.post('/signoff', function (req, res) {
   });
 });
 
+
+// Get Log
+app.post('/getlog', function (req, res) {
+
+  const options = {
+    url: APPLICATION_URL+'/TeleplanBroker',
+    form: req.body,
+    json: true
+  };
+  request.post(options, function(err, result, body) {
+    if(err){
+      return res.status(500).json(err);
+    }
+    var string = body.split(';');
+   
+    var obj = {
+      Result: string[1].split('=')[1],
+      Filename: string[2].split('=')[1],
+      Msgs: string[3].split('=')[1]
+    }
+   return res.send({status:200, data: obj});
+  });
+});
+
+// Get Log List
+app.post('/getloglist', function (req, res) {
+
+  const options = {
+    url: APPLICATION_URL+'/TeleplanBroker',
+    form: req.body,
+    json: true
+  };
+  request.post(options, function(err, result, body) {
+    if(err){
+      return res.status(500).json(err);
+    }
+    var string = body.split(';');
+   
+    var obj = {
+      Result: string[1].split('=')[1],
+      Filename: string[2].split('=')[1],
+      Msgs: string[3].split('=')[1]
+    }
+   return res.send({status:200, data: obj});
+  });
+});
+
+
+// File Upload
 app.post('/file-upload',  function (req, res) {
   upload(req, res, function (err) {
     if (err) {
