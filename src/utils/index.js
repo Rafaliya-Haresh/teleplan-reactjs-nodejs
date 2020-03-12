@@ -39,6 +39,7 @@ export function rxAjax(action) {
   return fetch(settings.url, {
     method: settings.method,
     crossDomain: true,
+    credentials: 'same-origin',
     headers: settings.headers,
     body: JSON.stringify(settings.body)
   }).then((res) => { 
