@@ -37,6 +37,7 @@ app.use(cookieParser());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
 
@@ -64,10 +65,31 @@ app.post('/login', function (req, res) {
       if(err){
         return res.status(500).json(err);
       }
-      console.log(result.caseless.dict)
+
+      // Set Cookies
+      // Set Cookies
+     if(result && result.caseless && result.caseless.dict && result.caseless.dict['set-cookie']){
+      console.log(result.caseless.dict);
       var name = result.caseless.dict['set-cookie'][0].split(';');
       var splitCookie = name[0].split('=');
-      res.cookie(splitCookie[0], splitCookie[1], {encode: String});
+
+      res.removeHeader('Access-Control-Allow-Credentials');
+      res.removeHeader('Access-Control-Allow-Headers');
+      res.removeHeader('Access-Control-Allow-Origin');
+      res.removeHeader('X-Powered-By');
+      res.removeHeader('ETag');
+      res.set("Content-Type", "text/html; charset=ISO-8859-1");
+      res.set("Server", "IBM_HTTP_Server");
+      res.set("Content-Language", "en-US");
+      res.set("Content-Length", 0);
+      res.set("Cache-Control", "no-cache='set-cookie,set-cookie2'");
+      res.set("Surrogate-Control", "no-store");
+      res.set("Connection", "Keep-Alive");
+      
+      res.cookie(splitCookie[0], splitCookie[1], {path: '/', encode: String});
+    }
+      
+      console.log(body)
       var string = body.split(';');
       var obj = {
         Result: string[1].split('=')[1],
@@ -137,12 +159,26 @@ app.post('/getlog', function (req, res) {
       return res.status(500).json(err);
     }
 
+     // Set Cookies
+     if(result && result.caseless && result.caseless.dict && result.caseless.dict['set-cookie']){
+      console.log(result.caseless.dict);
+      var name = result.caseless.dict['set-cookie'][0].split(';');
+      var splitCookie = name[0].split('=');
+      res.set("Content-Type", "text/html; charset=ISO-8859-1");
+      res.set("Server", "IBM_HTTP_Server");
+      res.set("Content-Language", "en-US");
+      res.set("Content-Length", "0");
+      res.set("Cache-Control", "no-cache='set-cookie,set-cookie2'");
+      res.set("Surrogate-Control", "no-store");
+      res.set("Connection", "close");
+      res.cookie(splitCookie[0], splitCookie[1], {path: '/', encode: String});
+    }
+
     console.log(body)
     var string = body.split(';');
    
     var obj = {
       Result: string[1].split('=')[1],
-      Filename: string[2].split('=')[1],
       Msgs: string[3].split('=')[1]
     }
    return res.send({status:200, data: obj});
@@ -165,7 +201,6 @@ app.post('/getloglist', function (req, res) {
    
     var obj = {
       Result: string[1].split('=')[1],
-      Filename: string[2].split('=')[1],
       Msgs: string[3].split('=')[1]
     }
    return res.send({status:200, data: obj});
