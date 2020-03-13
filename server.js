@@ -17,7 +17,7 @@ var storage = multer.diskStorage({
       cb(null, Date.now() + '-' +file.originalname )
     }
 })
-var upload = multer({ storage: storage }).single('file');
+var upload = multer({ storage: storage }).single('submitFile');
 app.use(cookieParser());
 // app.use(session({
 //   key: 'JSESSIONID',
@@ -37,7 +37,6 @@ app.use(cookieParser());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
 
@@ -67,34 +66,20 @@ app.post('/login', function (req, res) {
       }
 
       // Set Cookies
-      // Set Cookies
-     if(result && result.caseless && result.caseless.dict && result.caseless.dict['set-cookie']){
-      console.log(result.caseless.dict);
-      var name = result.caseless.dict['set-cookie'][0].split(';');
-      var splitCookie = name[0].split('=');
-
-      res.removeHeader('Access-Control-Allow-Credentials');
-      res.removeHeader('Access-Control-Allow-Headers');
-      res.removeHeader('Access-Control-Allow-Origin');
-      res.removeHeader('X-Powered-By');
-      res.removeHeader('ETag');
-      res.set("Content-Type", "text/html; charset=ISO-8859-1");
-      res.set("Server", "IBM_HTTP_Server");
-      res.set("Content-Language", "en-US");
-      res.set("Content-Length", 0);
-      res.set("Cache-Control", "no-cache='set-cookie,set-cookie2'");
-      res.set("Surrogate-Control", "no-store");
-      res.set("Connection", "Keep-Alive");
+    //  if(result && result.caseless && result.caseless.dict && result.caseless.dict['set-cookie']){
+    //   console.log(result.caseless.dict);
+    //   var name = result.caseless.dict['set-cookie'][0].split(';');
+    //   var splitCookie = name[0].split('=');
+    //   res.cookie(splitCookie[0], splitCookie[1],{domain: 'tlpt2.moh.hnet.bc.ca', encode: String});
+    // }
       
-      res.cookie(splitCookie[0], splitCookie[1], {path: '/', encode: String});
-    }
-      
-      console.log(body)
       var string = body.split(';');
-      var obj = {
-        Result: string[1].split('=')[1],
-        Msgs: string[3].split('=')[1],
-        username: req.body.username
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1],
+          username: req.body.username
+        }
       }
       return res.send({status:200, data: obj});
     });
@@ -113,10 +98,13 @@ app.post('/change-password', function (req, res) {
         return res.status(500).json(err);
       }
       var string = body.split(';');
-      var obj = {
-        Result: string[1].split('=')[1],
-        Msgs: string[3].split('=')[1],
-        username: req.body.username
+
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1],
+          username: req.body.username
+        }
       }
      return res.send({status:200, data: obj});
     });
@@ -126,7 +114,6 @@ app.post('/change-password', function (req, res) {
 // Sign off
 app.post('/signoff', function (req, res) {
 
-  res.clearCookie('JSESSIONID')
   const options = {
     url: APPLICATION_URL+'/TeleplanBroker',
     form: req.body,
@@ -137,11 +124,14 @@ app.post('/signoff', function (req, res) {
       return res.status(500).json(err);
     }
     var string = body.split(';');
-    var obj = {
-      Result: string[1].split('=')[1],
-      Msgs: string[3].split('=')[1]
+
+    if(string && string.length){
+      var obj = {
+        Result: string[1].split('=')[1],
+        Msgs: string[3].split('=')[1]
+      }
     }
-   return res.send({status:200, data: obj});
+    return res.send({status:200, data: obj});
   });
 });
 
@@ -158,30 +148,20 @@ app.post('/getlog', function (req, res) {
     if(err){
       return res.status(500).json(err);
     }
+    var responseString = body;
+    var splitVal = responseString.split('#');
 
-     // Set Cookies
-     if(result && result.caseless && result.caseless.dict && result.caseless.dict['set-cookie']){
-      console.log(result.caseless.dict);
-      var name = result.caseless.dict['set-cookie'][0].split(';');
-      var splitCookie = name[0].split('=');
-      res.set("Content-Type", "text/html; charset=ISO-8859-1");
-      res.set("Server", "IBM_HTTP_Server");
-      res.set("Content-Language", "en-US");
-      res.set("Content-Length", "0");
-      res.set("Cache-Control", "no-cache='set-cookie,set-cookie2'");
-      res.set("Surrogate-Control", "no-store");
-      res.set("Connection", "close");
-      res.cookie(splitCookie[0], splitCookie[1], {path: '/', encode: String});
+    var string = splitVal[1].split(';');
+
+    if(string && string.length){
+      var obj = {
+        Result: string[1].split('=')[1],
+        Msgs: string[3].split('=')[1],
+        text: splitVal[0]
+      }
     }
 
-    console.log(body)
-    var string = body.split(';');
-   
-    var obj = {
-      Result: string[1].split('=')[1],
-      Msgs: string[3].split('=')[1]
-    }
-   return res.send({status:200, data: obj});
+    return res.send({status:200, data: obj});
   });
 });
 
@@ -197,13 +177,19 @@ app.post('/getloglist', function (req, res) {
     if(err){
       return res.status(500).json(err);
     }
-    var string = body.split(';');
-   
-    var obj = {
-      Result: string[1].split('=')[1],
-      Msgs: string[3].split('=')[1]
+    var responseString = body;
+    var splitVal = responseString.split('#');
+
+    var string = splitVal[1].split(';');
+
+    if(string && string.length){
+      var obj = {
+        Result: string[1].split('=')[1],
+        Msgs: string[3].split('=')[1],
+        text: splitVal[0]
+      }
     }
-   return res.send({status:200, data: obj});
+    return res.send({status:200, data: obj});
   });
 });
 
@@ -214,12 +200,34 @@ app.post('/file-upload',  function (req, res) {
     if (err) {
         return res.status(500).json(err)
     }
-    var obj = {
+
+    var fileObj = {
       ExternalAction: req.body.ExternalAction,
       submitFile: req.file
     }
-    console.log(obj);
-    return res.send({status:200, data: obj});
+    console.log(fileObj);
+
+    const options = {
+      url: APPLICATION_URL+'/TeleplanBroker',
+      form: fileObj,
+      json: true
+    };
+    request.post(options, function(err, result, body) {
+      if(err){
+        return res.status(500).json(err);
+      }
+
+      console.log("===========", body)
+      var string = body.split(';');
+      
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1]
+        }
+      }
+      return res.send({status:200, data: obj});
+    });
   })  
 });
 

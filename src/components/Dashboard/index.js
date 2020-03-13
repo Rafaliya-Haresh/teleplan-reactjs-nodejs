@@ -3,6 +3,7 @@ import Header from '../Header';
 import './Dashboard.css';
 import ChangePassword from '../ChangePassword';
 import GetLog from '../GetLog';
+import PutRemit from '../PutRemit';
 import { rxAjax, NODE_APPLICATION_URL } from '../../utils';
 
 class Dashboard extends Component {
@@ -52,6 +53,7 @@ class Dashboard extends Component {
             <div className="col-4">
               <div className="list-group" id="list-tab" role="tablist">
                 <div className="list-group-item list-group-item-action home active" onClick={()=>this.isActiveToggle('home')}>Home</div>
+                <div className="list-group-item list-group-item-action home claims" onClick={()=>this.isActiveToggle('claims')}>Send Claims</div>
                 <div className="list-group-item list-group-item-action change-password"  onClick={()=>this.isActiveToggle('change-password')}>Change Password</div>
                 <div className="list-group-item list-group-item-action log"  onClick={()=>this.isActiveToggle('log')}>Other Processing + Logs</div>
                 <div className="list-group-item list-group-item-action"  onClick={()=>this.signOff()}>Sign off</div>
@@ -67,6 +69,10 @@ class Dashboard extends Component {
                   <p>Use the menu at the left to select the service you would like to access</p>
                 </div>
                 
+                <div className="tab-pane" id="claims">
+                  <PutRemit/> 
+                </div>
+
                 <div className="tab-pane" id="change-password">
                   <ChangePassword/> 
                 </div>

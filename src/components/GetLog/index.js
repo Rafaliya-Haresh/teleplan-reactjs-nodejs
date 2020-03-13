@@ -7,11 +7,13 @@ class GetLog extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			ExternalAction: 'AgetLog',
+			ExternalAction: "AgetLog",
 			logname: '',
 			logtype: '',
-			mode: 'DOWNLOAD',
+			mode: "DOWNLOAD",
 			loaded: false,
+			data: '',
+			logList: '',
 			listLoaded: false,
 			res_error: '',
 			errors: {}
@@ -52,12 +54,13 @@ class GetLog extends Component {
 					res_error: returnData.data.Msgs
 				})
 			}else{
-          this.setState({
-              loaded: false,
-              logname: '',
-              logtype: ''
-          });
-      }
+				this.setState({
+					loaded: false,
+					logname: '',
+					logtype: '',
+					data: returnData.data.text
+				});
+      		}
 		}else{
 			this.setState({
 				loaded: false
@@ -94,13 +97,16 @@ class GetLog extends Component {
 			method: 'POST',
 			endpoint: NODE_APPLICATION_URL+'/getloglist',
 			payload: {
-				ExternalAction: 'AgetLogList'
+				"ExternalAction": "AgetLogList"
 			}
 		});
 		this.setState({
 			listLoaded: false
 		});
 		console.log("Retrive Logs List ", returnData);
+		this.setState({
+			logList: returnData.data.text
+		})
 	}
 
 	render() {
@@ -134,14 +140,17 @@ class GetLog extends Component {
 									Retrive Log</button>
 								</form>
 							</div>
+							{this.state.data}
 						</div>
 					</div>
-				</div> 
+				</div>
 				<div className="row mt-5">
 					<div className="col-lg-12">
 						<button type="button" className="btn btn-primary" disabled={this.state.listLoaded} onClick={this.getRetriveGetLogList}>
 									{this.state.listLoaded && <Loader/>}
 									Retrive Log List</button>
+
+									{this.state.logList}
 					</div>
 				</div>
 		  	</div>

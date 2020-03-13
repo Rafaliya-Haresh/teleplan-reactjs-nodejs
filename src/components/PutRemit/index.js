@@ -30,7 +30,7 @@ class PutRemit extends Component {
 		
 		if(this.validateForm()){
 			const data = new FormData() 
-			data.append('file', this.state.submitFile)
+			data.append('submitFile', this.state.submitFile)
 			data.append('ExternalAction', 'AputRemit')
 			
 			axios.post(NODE_APPLICATION_URL+ "/file-upload", data).then(result => {
@@ -66,8 +66,9 @@ class PutRemit extends Component {
 
 	render() {
 	  return (
-	  	<div className="row mt-5">
-			<div className="col-lg-6 offset-lg-3">
+	  	<div className="row">
+			<div className="col-lg-12">
+				<h4>Send Claims</h4>
 			  	<div className="card">
 			  		<div className="card-body">
 					  	{this.state.res_error &&
@@ -75,7 +76,7 @@ class PutRemit extends Component {
 						}
 						<form onSubmit={this.handleRemitSubmit}>
 							<div className="form-group">
-								<label htmlFor="passwordInput">Password</label>
+								<label htmlFor="passwordInput">Select file to send</label>
 								<input type="file" className="form-control" onChange={this.onFileChangeHandler}/>
 								<div className="errorMsg">{this.state.errors.submitFile}</div>
 							</div>
