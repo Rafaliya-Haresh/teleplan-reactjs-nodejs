@@ -1,5 +1,5 @@
 var express = require('express');
-var session = require('express-session');
+// var session = require('express-session');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
@@ -19,19 +19,20 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage: storage }).single('file');
 app.use(cookieParser());
-app.use(session({
-  key: 'JSESSIONID',
-  secret: 'somerandonstuffs',
-  resave: false,
-  saveUninitialized: false,
-}));
+// app.use(session({
+//   key: 'JSESSIONID',
+//   secret: 'stuff',
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: { path: '/', httpOnly: false, secure: false, maxAge: null }
+// }));
 
-app.use((req, res, next) => {
-  if (req.cookies.JSESSIONID && !req.session.user) {
-      res.clearCookie('JSESSIONID');        
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (req.cookies.JSESSIONID && !req.session.user) {
+//       res.clearCookie('JSESSIONID');        
+//   }
+//   next();
+// });
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
@@ -63,7 +64,15 @@ app.post('/login', function (req, res) {
       if(err){
         return res.status(500).json(err);
       }
-      req.session.user = body;
+      console.log(result.caseless.dict)
+      var name = result.caseless.dict['set-cookie'][0].split(';')
+      
+      var t = name[0].split('=');
+      console.log(decodeURI(t[1]));
+      
+      res.cookie(t[0], decodeURI(t[1]), {httpOnly: false, secure: false});
+     // console.log("====", decodeURI(result.caseless.dict['set-cookie'][0]));
+     // req.session.user = result.caseless.dict['set-cookie'][0];
       var string = body.split(';');
       var obj = {
         Result: string[1].split('=')[1],
@@ -99,6 +108,8 @@ app.post('/change-password', function (req, res) {
 
 // Sign off
 app.post('/signoff', function (req, res) {
+
+  res.clearCookie('JSESSIONID')
   const options = {
     url: APPLICATION_URL+'/TeleplanBroker',
     form: req.body,

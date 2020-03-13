@@ -1,6 +1,6 @@
 
-//export const NODE_APPLICATION_URL = 'http://localhost:5000';
-export const NODE_APPLICATION_URL = 'https://teleplan.herokuapp.com';
+export const NODE_APPLICATION_URL = 'http://localhost:5000';
+//export const NODE_APPLICATION_URL = 'https://teleplan.herokuapp.com';
 
 export function rxAjax(action) {
   const errors = [];
@@ -39,10 +39,9 @@ export function rxAjax(action) {
   return fetch(settings.url, {
     method: settings.method,
     crossDomain: true,
-    credentials: 'same-origin',
     headers: settings.headers,
     body: JSON.stringify(settings.body)
-  }).then((res) => { 
+  }).then((res) => {
     return res.json();
   }).then(data => {
     return data;
