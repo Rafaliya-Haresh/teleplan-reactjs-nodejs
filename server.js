@@ -65,14 +65,9 @@ app.post('/login', function (req, res) {
         return res.status(500).json(err);
       }
       console.log(result.caseless.dict)
-      var name = result.caseless.dict['set-cookie'][0].split(';')
-      
-      var t = name[0].split('=');
-      console.log(decodeURI(t[1]));
-      
-      res.cookie(t[0], decodeURI(t[1]), {httpOnly: false, secure: false});
-     // console.log("====", decodeURI(result.caseless.dict['set-cookie'][0]));
-     // req.session.user = result.caseless.dict['set-cookie'][0];
+      var name = result.caseless.dict['set-cookie'][0].split(';');
+      var splitCookie = name[0].split('=');
+      res.cookie(splitCookie[0], splitCookie[1], {encode: String});
       var string = body.split(';');
       var obj = {
         Result: string[1].split('=')[1],
@@ -141,6 +136,8 @@ app.post('/getlog', function (req, res) {
     if(err){
       return res.status(500).json(err);
     }
+
+    console.log(body)
     var string = body.split(';');
    
     var obj = {
