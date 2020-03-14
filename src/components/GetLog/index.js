@@ -23,6 +23,14 @@ class GetLog extends Component {
 		this.getRetriveGetLogList = this.getRetriveGetLogList.bind(this);
 	}
 
+	nl2br(str, is_xhtml) {
+		if (typeof str === 'undefined' || str === null) {
+			return '';
+		}
+		var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br/>' : '<br>';
+		return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+	}
+
 	handleFieldChange(event) {
 		const { name, value } = event.target;
 		
@@ -44,7 +52,8 @@ class GetLog extends Component {
 					MODE: this.state.mode
 				}
 			});
-			console.log("Retrive Logs ", returnData);
+
+			console.log("Retrive Logs ", returnData.data.text);
 			if(returnData.data.Result !== 'SUCCESS'){
 				this.setState({
 					loaded: false
@@ -140,7 +149,8 @@ class GetLog extends Component {
 									Retrive Log</button>
 								</form>
 							</div>
-							{this.state.data}
+
+							<div dangerouslySetInnerHTML={{ __html: this.nl2br(this.state.data) }} style={{padding: '10px 20px'}}/>
 						</div>
 					</div>
 				</div>
@@ -149,8 +159,7 @@ class GetLog extends Component {
 						<button type="button" className="btn btn-primary" disabled={this.state.listLoaded} onClick={this.getRetriveGetLogList}>
 									{this.state.listLoaded && <Loader/>}
 									Retrive Log List</button>
-
-									{this.state.logList}
+									<div dangerouslySetInnerHTML={{ __html: this.nl2br(this.state.logList) }} style={{padding: '10px 20px'}}/>
 					</div>
 				</div>
 		  	</div>
