@@ -27,8 +27,7 @@ export function rxAjax(action) {
   settings.method = method;
   settings.crossDomain = true;
   settings.headers = {
-    'Content-Type': 'application/json',
-    ...action.headers,
+    'Content-Type': 'application/json'
   };
   if (action.responseType) settings.responseType = action.responseType;
 

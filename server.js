@@ -65,13 +65,13 @@ app.post('/login', function (req, res) {
         return res.status(500).json(err);
       }
 
-      // Set Cookies
-    //  if(result && result.caseless && result.caseless.dict && result.caseless.dict['set-cookie']){
-    //   console.log(result.caseless.dict);
-    //   var name = result.caseless.dict['set-cookie'][0].split(';');
-    //   var splitCookie = name[0].split('=');
-    //   res.cookie(splitCookie[0], splitCookie[1],{domain: 'tlpt2.moh.hnet.bc.ca', encode: String});
-    // }
+     // Set Cookies
+      if(result && result.caseless && result.caseless.dict && result.caseless.dict['set-cookie']){
+        console.log(result.caseless.dict);
+        var name = result.caseless.dict['set-cookie'][0].split(';');
+        var splitCookie = name[0].split('=');
+        res.cookie(splitCookie[0], splitCookie[1],{encode: String});
+      }
       
       var string = body.split(';');
       if(string && string.length){
@@ -138,9 +138,11 @@ app.post('/signoff', function (req, res) {
 
 // Get Log
 app.post('/getlog', function (req, res) {
-
   const options = {
     url: APPLICATION_URL+'/TeleplanBroker',
+    headers: {
+      'Cookie': 'JSESSIONID='+req.cookies.JSESSIONID+';Path=/'
+    },
     form: req.body,
     json: true
   };
@@ -148,6 +150,7 @@ app.post('/getlog', function (req, res) {
     if(err){
       return res.status(500).json(err);
     }
+
     var responseString = body;
     var splitVal = responseString.split('#');
 
@@ -160,7 +163,6 @@ app.post('/getlog', function (req, res) {
         text: splitVal[0]
       }
     }
-
     return res.send({status:200, data: obj});
   });
 });
@@ -170,6 +172,9 @@ app.post('/getloglist', function (req, res) {
 
   const options = {
     url: APPLICATION_URL+'/TeleplanBroker',
+    headers: {
+      'Cookie': 'JSESSIONID='+req.cookies.JSESSIONID+';Path=/'
+    },
     form: req.body,
     json: true
   };
@@ -205,10 +210,12 @@ app.post('/file-upload',  function (req, res) {
       ExternalAction: req.body.ExternalAction,
       submitFile: req.file
     }
-    console.log(fileObj);
 
     const options = {
       url: APPLICATION_URL+'/TeleplanBroker',
+      headers: {
+        'Cookie': 'JSESSIONID='+req.cookies.JSESSIONID+';Path=/'
+      },
       form: fileObj,
       json: true
     };
@@ -216,8 +223,6 @@ app.post('/file-upload',  function (req, res) {
       if(err){
         return res.status(500).json(err);
       }
-
-      console.log("===========", body)
       var string = body.split(';');
       
       if(string && string.length){
