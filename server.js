@@ -227,7 +227,7 @@ app.post('/file-upload',  function (req, res) {
 
     var fileObj = {
       ExternalAction: req.body.ExternalAction,
-      submitFile: req.file
+      submitFile: req.file.path
     }
 
     const options = {
