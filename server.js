@@ -162,20 +162,23 @@ app.post('/getlog', function (req, res) {
     if(err){
       return res.status(500).json(err);
     }
-
     var responseString = body;
-    var splitVal = responseString.split('#');
+    if(responseString.match('#TID') != null){
+      var splitVal = responseString.split('#');
 
-    var string = splitVal[1].split(';');
+      var string = splitVal[1].split(';');
 
-    if(string && string.length){
-      var obj = {
-        Result: string[1].split('=')[1],
-        Msgs: string[3].split('=')[1],
-        text: splitVal[0]
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1],
+          text: splitVal[0]
+        }
       }
+      return res.send({status:200, data: obj});
+    }else{
+      return res.status(500).json({data: false});
     }
-    return res.send({status:200, data: obj});
   });
 });
 
@@ -195,18 +198,22 @@ app.post('/getloglist', function (req, res) {
       return res.status(500).json(err);
     }
     var responseString = body;
-    var splitVal = responseString.split('#');
+    if(responseString.match('#TID') != null){
+      var splitVal = responseString.split('#');
 
-    var string = splitVal[1].split(';');
+      var string = splitVal[1].split(';');
 
-    if(string && string.length){
-      var obj = {
-        Result: string[1].split('=')[1],
-        Msgs: string[3].split('=')[1],
-        text: splitVal[0]
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1],
+          text: splitVal[0]
+        }
       }
+      return res.send({status:200, data: obj});
+    }else{
+      return res.status(500).json({data: false});
     }
-    return res.send({status:200, data: obj});
   });
 });
 
@@ -233,17 +240,22 @@ app.post('/file-upload',  function (req, res) {
     };
     request.post(options, function(err, result, body) {
       if(err){
-        return res.status(500).json(err);
+        return res.status(400).json(err);
       }
-      var string = body.split(';');
-      
-      if(string && string.length){
-        var obj = {
-          Result: string[1].split('=')[1],
-          Msgs: string[3].split('=')[1]
+
+      if(body.match('#TID') != null){
+        var string = body.split(';');
+        
+        if(string && string.length){
+          var obj = {
+            Result: string[1].split('=')[1],
+            Msgs: string[3].split('=')[1]
+          }
         }
+        return res.send({status:200, data: obj});
+      }else{
+        return res.send({status:400, data: false});
       }
-      return res.send({status:200, data: obj});
     });
   })  
 });
@@ -272,17 +284,18 @@ app.post('/ascii-upload',  function (req, res) {
     };
     request.post(options, function(err, result, body) {
       if(err){
-        return res.status(500).json(err);
+        return res.status(400).json(err);
       }
-      var string = body.split(';');
-      
-      if(string && string.length){
-        var obj = {
-          Result: string[1].split('=')[1],
-          Msgs: string[3].split('=')[1]
+
+        var string = body.split(';');
+        
+        if(string && string.length){
+          var obj = {
+            Result: string[1].split('=')[1],
+            Msgs: string[3].split('=')[1]
+          }
         }
-      }
-      return res.send({status:200, data: obj});
+        return res.send({status:200, data: obj});
     });
   })  
 });
@@ -304,18 +317,22 @@ app.post('/get-ascii-file', function (req, res) {
     }
 
     var responseString = body;
-    var splitVal = responseString.split('#');
+    if(responseString.match('#TID') != null){
+      var splitVal = responseString.split('#');
 
-    var string = splitVal[1].split(';');
+      var string = splitVal[1].split(';');
 
-    if(string && string.length){
-      var obj = {
-        Result: string[1].split('=')[1],
-        Msgs: string[3].split('=')[1],
-        text: splitVal[0]
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1],
+          text: splitVal[0]
+        }
       }
+      return res.send({status:200, data: obj});
+    }else{
+      return res.status(500).json({data: false});
     }
-    return res.send({status:200, data: obj});
   });
 });
 
@@ -335,18 +352,22 @@ app.post('/get-remit', function (req, res) {
     }
 
     var responseString = body;
-    var splitVal = responseString.split('#');
+    if(responseString.match('#TID') != null){
+      var splitVal = responseString.split('#');
 
-    var string = splitVal[1].split(';');
+      var string = splitVal[1].split(';');
 
-    if(string && string.length){
-      var obj = {
-        Result: string[1].split('=')[1],
-        Msgs: string[3].split('=')[1],
-        text: splitVal[0]
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1],
+          text: splitVal[0]
+        }
       }
+      return res.send({status:200, data: obj});
+    }else{
+      return res.status(500).json({data: false});
     }
-    return res.send({status:200, data: obj});
   });
 });
 
@@ -369,18 +390,22 @@ app.post('/checkE45', function (req, res) {
     }
 
     var responseString = body;
-    var splitVal = responseString.split('#');
+    if(responseString.match('#TID') != null){
+      var splitVal = responseString.split('#');
 
-    var string = splitVal[1].split(';');
+      var string = splitVal[1].split(';');
 
-    if(string && string.length){
-      var obj = {
-        Result: string[1].split('=')[1],
-        Msgs: string[3].split('=')[1],
-        text: splitVal[0]
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1],
+          text: splitVal[0]
+        }
       }
+      return res.send({status:200, data: obj});
+    }else{
+      return res.status(500).json({data: false});
     }
-    return res.send({status:200, data: obj});
   });
 });
 var server = app.listen(app.get('port'), function () {

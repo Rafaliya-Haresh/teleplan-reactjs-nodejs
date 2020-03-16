@@ -27,14 +27,18 @@ class PutRemit extends Component {
 	
 	handleRemitSubmit(e){
 		e.preventDefault();
-		
 		if(this.validateForm()){
 			const data = new FormData() 
 			data.append('submitFile', this.state.submitFile)
 			data.append('ExternalAction', 'AputRemit')
 			
 			axios.post(NODE_APPLICATION_URL+ "/file-upload", data).then(result => {
-				if(result.data.data.Result !== 'SUCCESS'){
+				if(!result.data.data){
+					localStorage.removeItem('user');
+					this.props.history.push('/');
+					return;
+				}
+				else if(result.data.data.Result !== 'SUCCESS'){
 					this.setState({
 						loaded: false,
 						res_error: result.data.data.Msgs,

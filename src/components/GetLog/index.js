@@ -49,7 +49,11 @@ class GetLog extends Component {
 			});
 
 			console.log("Retrive Logs ", returnData);
-			if(returnData.data.Result !== 'SUCCESS'){
+			if(!returnData.data){
+				this.props.history.push('/');
+				return;
+			}
+			else if(returnData.data.Result !== 'SUCCESS'){
 				this.setState({
 					loaded: false
         		});
@@ -105,6 +109,11 @@ class GetLog extends Component {
 				"ExternalAction": "AgetLogList"
 			}
 		});
+		if(!returnData.data){
+			localStorage.removeItem('user');
+			this.props.history.push('/');
+			return;
+		}
 		this.setState({
 			listLoaded: false
 		});

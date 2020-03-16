@@ -84,15 +84,15 @@ class Dashboard extends Component {
                 </div>
                 
                 <div className="tab-pane" id="sendclaims">
-                  <PutRemit/> 
+                  <PutRemit history={this.props.history}/> 
                     <br/><br/>
-                  <PutAscii/>
+                  <PutAscii history={this.props.history}/>
                 </div>
 
                 <div className="tab-pane" id="retiveRemittances">
-                  <GetAsciiFile/>
+                  <GetAsciiFile history={this.props.history}/>
                     <br/><br/>
-                    <GetRemit/>
+                    <GetRemit  history={this.props.history}/>
                 </div>
 
                 <div className="tab-pane" id="change-password">
@@ -100,12 +100,13 @@ class Dashboard extends Component {
                 </div>
 
                 <div className="tab-pane" id="log">
-                  <GetLog/> 
+                  <GetLog  history={this.props.history}/> 
                 </div>
 
                 <div className="tab-pane" id="checkEligibility">
-                  <AcheckE45/>
+                  <AcheckE45  history={this.props.history}/>
                 </div>
+
 
               </div>
             </div>

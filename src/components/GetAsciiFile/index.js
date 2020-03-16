@@ -42,7 +42,12 @@ class GetAsciiFile extends Component {
 				}
 			});
 			console.log("GetAsciiFile ", returnData);
-			if(returnData.data.Result !== 'SUCCESS'){
+			if(!returnData.data){
+				localStorage.removeItem('user');
+				this.props.history.push('/');
+				return false;
+			}
+			else if(returnData.data.Result !== 'SUCCESS'){
 				this.setState({
                     loaded: false,
                     res_error: returnData.data.Msgs,

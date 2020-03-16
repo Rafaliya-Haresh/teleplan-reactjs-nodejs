@@ -78,7 +78,12 @@ class AcheckE45 extends Component {
 				}
 			});
 			console.log("AcheckE45 ", returnData);
-			if(returnData.data.Result !== 'SUCCESS'){
+			if(!returnData.data){
+				localStorage.removeItem('user');
+				this.props.history.push('/');
+				return;
+			}
+			else if(returnData.data.Result !== 'SUCCESS'){
 				this.setState({
 					loaded: false,
 					res_error: returnData.data.Msgs,
