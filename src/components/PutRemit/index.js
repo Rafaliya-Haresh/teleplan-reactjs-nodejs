@@ -9,7 +9,6 @@ class PutRemit extends Component {
 	constructor() {
 		super();
 		this.state = {
-			ExternalAction: 'AputRemit',
             submitFile: '',
 			res_error: '',
 			loaded: false,
@@ -82,14 +81,14 @@ class PutRemit extends Component {
 						<form onSubmit={this.handleRemitSubmit}>
 							<div className="form-group">
 								<label htmlFor="passwordInput">Select file to send</label>
-								<input type="file" className="form-control" onChange={this.onFileChangeHandler}/>
+								<input type="file" className="form-control"  name="submitFile" onChange={this.onFileChangeHandler}/>
 								<div className="errorMsg">{this.state.errors.submitFile}</div>
 							</div>
 							<button type="submit" className="btn btn-primary" disabled={this.state.loaded}>
 			  				{this.state.loaded &&
 								<Loader/>
 							}
-							Click here to upload Remit</button>
+							Upload Remit</button>
 						</form>
 					</div>
 				</div>

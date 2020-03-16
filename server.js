@@ -14,19 +14,19 @@ var storage = multer.diskStorage({
       cb(null, './uploads/log')
     },
     filename: function (req, file, cb) {
-      cb(null, new Date() + file.originalname )
+      cb(null, Date.now() + file.originalname )
     }
 })
-var upload = multer({ storage: storage }).single('submitFile');
+var uploadFile = multer({ storage: storage }).single('submitFile');
 
 
-// File upload
+// Ascii upload
 var storageAscii = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads/ascii')
   },
   filename: function (req, file, cb) {
-    cb(null, new Date() + file.originalname )
+    cb(null, Date.now() + file.originalname )
   }
 })
 var uploadAscii = multer({ storage: storageAscii }).single('submitASCII');
@@ -220,7 +220,7 @@ app.post('/getloglist', function (req, res) {
 
 // File Upload
 app.post('/file-upload',  function (req, res) {
-  upload(req, res, function (err) {
+  uploadFile(req, res, function (err) {
     if (err) {
         return res.status(500).json(err)
     }
@@ -286,7 +286,7 @@ app.post('/ascii-upload',  function (req, res) {
       if(err){
         return res.status(400).json(err);
       }
-
+      if(body.match('#TID') != null){
         var string = body.split(';');
         
         if(string && string.length){
@@ -296,6 +296,9 @@ app.post('/ascii-upload',  function (req, res) {
           }
         }
         return res.send({status:200, data: obj});
+      }else{
+        return res.send({status:400, data: false});
+      }
     });
   })  
 });

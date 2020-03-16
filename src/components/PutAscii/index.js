@@ -9,36 +9,40 @@ class PutAscii extends Component {
 	constructor() {
 		super();
 		this.state = {
-			ExternalAction: 'AputRemit',
             submitASCII: '',
 			res_error: '',
 			loaded: false,
 			errors: {}
 		}
-		this.onFileChangeHandler = this.onFileChangeHandler.bind(this);
-        this.handleRemitSubmit = this.handleRemitSubmit.bind(this);
+		this.onAsciiChangeHandler = this.onAsciiChangeHandler.bind(this);
+        this.handleAsciiSubmit = this.handleAsciiSubmit.bind(this);
 	}
 
-	onFileChangeHandler(e){
+	onAsciiChangeHandler(e){
         this.setState({
             submitASCII: e.target.files[0]
         });
     };
 	
-	handleRemitSubmit(e){
+	handleAsciiSubmit(e){
 		e.preventDefault();
 		
 		if(this.validateForm()){
-			const data = new FormData() 
-			data.append('submitASCII', this.state.submitASCII)
-			data.append('ExternalAction', 'submitASCII')
+			const dataAscii = new FormData() 
+			dataAscii.append('submitASCII', this.state.submitASCII)
+			dataAscii.append('ExternalAction', 'AputAscii')
 			
-			axios.post(NODE_APPLICATION_URL+ "/ascii-upload", data).then(result => {
-				if(result.data.data.Result !== 'SUCCESS'){
+			axios.post(NODE_APPLICATION_URL+ "/ascii-upload", dataAscii).then(result => {
+				if(!result.data.data){
+					localStorage.removeItem('user');
+					this.props.history.push('/');
+					return;
+				}
+				else if(result.data.data.Result !== 'SUCCESS'){
 					this.setState({
 						loaded: false,
 						res_error: result.data.data.Msgs,
-						submitFile: '',
+						submitASCII: '',
 					});
 				}
 			})
@@ -74,17 +78,17 @@ class PutAscii extends Component {
 					  	{this.state.res_error &&
 						  <div className="alert alert-danger" role="alert">{this.state.res_error}</div>
 						}
-						<form onSubmit={this.handleRemitSubmit}>
+						<form onSubmit={this.handleAsciiSubmit}>
 							<div className="form-group">
 								<label htmlFor="passwordInput">Select file to send</label>
-								<input type="file" className="form-control" onChange={this.onFileChangeHandler}/>
+								<input type="file" className="form-control" name="submitASCII" onChange={this.onAsciiChangeHandler}/>
 								<div className="errorMsg">{this.state.errors.submitASCII}</div>
 							</div>
 							<button type="submit" className="btn btn-primary" disabled={this.state.loaded}>
 			  				{this.state.loaded &&
 								<Loader/>
 							}
-							Click here to upload Ascii</button>
+							Upload Ascii</button>
 						</form>
 					</div>
 				</div>
