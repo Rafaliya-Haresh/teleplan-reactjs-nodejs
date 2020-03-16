@@ -271,7 +271,7 @@ app.post('/ascii-upload',  function (req, res) {
 
     var fileObj = {
       ExternalAction: req.body.ExternalAction,
-      submitASCII: req.file
+      submitASCII: req.file.path
     }
 
     const options = {
