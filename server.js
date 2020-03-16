@@ -14,7 +14,7 @@ var storage = multer.diskStorage({
       cb(null, './uploads/log')
     },
     filename: function (req, file, cb) {
-      cb(null, file.originalname )
+      cb(null, new Date() + file.originalname )
     }
 })
 var upload = multer({ storage: storage }).single('submitFile');
@@ -26,7 +26,7 @@ var storageAscii = multer.diskStorage({
     cb(null, './uploads/ascii')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname )
+    cb(null, new Date() + file.originalname )
   }
 })
 var uploadAscii = multer({ storage: storageAscii }).single('submitASCII');
