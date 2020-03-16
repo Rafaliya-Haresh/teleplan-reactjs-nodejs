@@ -11,7 +11,7 @@ var APPLICATION_URL = 'https://tlpt2.moh.hnet.bc.ca';
 // File upload
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './uploads/log')
+      cb(null, './public/log')
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + file.originalname )
@@ -23,7 +23,7 @@ var uploadFile = multer({ storage: storage }).single('submitFile');
 // Ascii upload
 var storageAscii = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/ascii')
+    cb(null, './public/ascii')
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + file.originalname )
