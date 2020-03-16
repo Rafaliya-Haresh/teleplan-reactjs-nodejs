@@ -11,13 +11,25 @@ var APPLICATION_URL = 'https://tlpt2.moh.hnet.bc.ca';
 // File upload
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './uploads')
+      cb(null, './uploads/log')
     },
     filename: function (req, file, cb) {
-      cb(null, Date.now() + '-' +file.originalname )
+      cb(null, file.originalname )
     }
 })
 var upload = multer({ storage: storage }).single('submitFile');
+
+
+// File upload
+var storageAscii = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/ascii')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname )
+  }
+})
+var uploadAscii = multer({ storage: storageAscii }).single('submitASCII');
 app.use(cookieParser());
 // app.use(session({
 //   key: 'JSESSIONID',
@@ -236,6 +248,141 @@ app.post('/file-upload',  function (req, res) {
   })  
 });
 
+
+
+// Ascii Upload
+app.post('/ascii-upload',  function (req, res) {
+  uploadAscii(req, res, function (err) {
+    if (err) {
+        return res.status(500).json(err)
+    }
+
+    var fileObj = {
+      ExternalAction: req.body.ExternalAction,
+      submitASCII: req.file
+    }
+
+    const options = {
+      url: APPLICATION_URL+'/TeleplanBroker',
+      headers: {
+        'Cookie': 'JSESSIONID='+req.cookies.JSESSIONID+';Path=/'
+      },
+      form: fileObj,
+      json: true
+    };
+    request.post(options, function(err, result, body) {
+      if(err){
+        return res.status(500).json(err);
+      }
+      var string = body.split(';');
+      
+      if(string && string.length){
+        var obj = {
+          Result: string[1].split('=')[1],
+          Msgs: string[3].split('=')[1]
+        }
+      }
+      return res.send({status:200, data: obj});
+    });
+  })  
+});
+
+
+// Get Ascii File
+app.post('/get-ascii-file', function (req, res) {
+  const options = {
+    url: APPLICATION_URL+'/TeleplanBroker',
+    headers: {
+      'Cookie': 'JSESSIONID='+req.cookies.JSESSIONID+';Path=/'
+    },
+    form: req.body,
+    json: true
+  };
+  request.post(options, function(err, result, body) {
+    if(err){
+      return res.status(500).json(err);
+    }
+
+    var responseString = body;
+    var splitVal = responseString.split('#');
+
+    var string = splitVal[1].split(';');
+
+    if(string && string.length){
+      var obj = {
+        Result: string[1].split('=')[1],
+        Msgs: string[3].split('=')[1],
+        text: splitVal[0]
+      }
+    }
+    return res.send({status:200, data: obj});
+  });
+});
+
+// Get Remit
+app.post('/get-remit', function (req, res) {
+  const options = {
+    url: APPLICATION_URL+'/TeleplanBroker',
+    headers: {
+      'Cookie': 'JSESSIONID='+req.cookies.JSESSIONID+';Path=/'
+    },
+    form: req.body,
+    json: true
+  };
+  request.post(options, function(err, result, body) {
+    if(err){
+      return res.status(500).json(err);
+    }
+
+    var responseString = body;
+    var splitVal = responseString.split('#');
+
+    var string = splitVal[1].split(';');
+
+    if(string && string.length){
+      var obj = {
+        Result: string[1].split('=')[1],
+        Msgs: string[3].split('=')[1],
+        text: splitVal[0]
+      }
+    }
+    return res.send({status:200, data: obj});
+  });
+});
+
+
+
+
+// Get Remit
+app.post('/checkE45', function (req, res) {
+  const options = {
+    url: APPLICATION_URL+'/TeleplanBroker',
+    headers: {
+      'Cookie': 'JSESSIONID='+req.cookies.JSESSIONID+';Path=/'
+    },
+    form: req.body,
+    json: true
+  };
+  request.post(options, function(err, result, body) {
+    if(err){
+      return res.status(500).json(err);
+    }
+
+    var responseString = body;
+    var splitVal = responseString.split('#');
+
+    var string = splitVal[1].split(';');
+
+    if(string && string.length){
+      var obj = {
+        Result: string[1].split('=')[1],
+        Msgs: string[3].split('=')[1],
+        text: splitVal[0]
+      }
+    }
+    return res.send({status:200, data: obj});
+  });
+});
 var server = app.listen(app.get('port'), function () {
    var host = server.address().address
    console.log("Example app listening at http://%s:%s", host, app.get('port'))

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { rxAjax, NODE_APPLICATION_URL } from '../../utils';
+import { rxAjax, NODE_APPLICATION_URL, nl2br } from '../../utils';
 import Loader from '../../container/Loader';
 
 class GetLog extends Component {
@@ -23,14 +23,6 @@ class GetLog extends Component {
 		this.getRetriveGetLogList = this.getRetriveGetLogList.bind(this);
 	}
 
-	nl2br(str, is_xhtml) {
-		if (typeof str === 'undefined' || str === null) {
-			return '';
-		}
-		var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br/>' : '<br>';
-		return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-	}
-
 	handleFieldChange(event) {
 		const { name, value } = event.target;
 		
@@ -40,6 +32,9 @@ class GetLog extends Component {
 	}
 	
 	async handleLoginSubmit(e){
+		this.setState({
+			data: ''
+		})
 		e.preventDefault();
 		if(this.validateForm()){
 			const returnData = await rxAjax({
@@ -53,7 +48,7 @@ class GetLog extends Component {
 				}
 			});
 
-			console.log("Retrive Logs ", returnData.data.text);
+			console.log("Retrive Logs ", returnData);
 			if(returnData.data.Result !== 'SUCCESS'){
 				this.setState({
 					loaded: false
@@ -100,7 +95,8 @@ class GetLog extends Component {
 
 	async getRetriveGetLogList(){
 		this.setState({
-			listLoaded: true
+			listLoaded: true,
+			logList: ''
 		});
 		const returnData = await rxAjax({
 			method: 'POST',
@@ -150,16 +146,16 @@ class GetLog extends Component {
 								</form>
 							</div>
 
-							<div dangerouslySetInnerHTML={{ __html: this.nl2br(this.state.data) }} style={{padding: '10px 20px'}}/>
+							<div id="getlog" dangerouslySetInnerHTML={{ __html: nl2br(this.state.data) }} style={{padding: '10px 20px'}}/>
 						</div>
 					</div>
 				</div>
 				<div className="row mt-5">
 					<div className="col-lg-12">
-						<button type="button" className="btn btn-primary" disabled={this.state.listLoaded} onClick={this.getRetriveGetLogList}>
+						<button type="button" className="btn btn-link" disabled={this.state.listLoaded} onClick={this.getRetriveGetLogList}>
 									{this.state.listLoaded && <Loader/>}
 									Retrive Log List</button>
-									<div dangerouslySetInnerHTML={{ __html: this.nl2br(this.state.logList) }} style={{padding: '10px 20px'}}/>
+									<div id="getloglist" dangerouslySetInnerHTML={{ __html: nl2br(this.state.logList) }} style={{padding: '10px 20px'}}/>
 					</div>
 				</div>
 		  	</div>

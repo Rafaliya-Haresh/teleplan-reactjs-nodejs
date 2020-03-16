@@ -4,6 +4,10 @@ import './Dashboard.css';
 import ChangePassword from '../ChangePassword';
 import GetLog from '../GetLog';
 import PutRemit from '../PutRemit';
+import PutAscii from '../PutAscii';
+import GetAsciiFile from '../GetAsciiFile';
+import GetRemit from '../GetRemit';
+import AcheckE45 from '../AcheckE45';
 import { rxAjax, NODE_APPLICATION_URL } from '../../utils';
 
 class Dashboard extends Component {
@@ -11,9 +15,12 @@ class Dashboard extends Component {
   constructor(props){
     super(props);
     this.state = {
-      ExternalAction: 'AsignOff'
+      ExternalAction: 'AsignOff',
+      data: ''
     }
   }
+
+
   isActiveToggle(step){
     let tabPaneArr = document.getElementsByClassName('tab-pane');
     for (var i = 0; i < tabPaneArr.length; i++) {
@@ -26,6 +33,11 @@ class Dashboard extends Component {
     }
     document.getElementById(step).classList.add('active');
     document.querySelector('.list-group-item.list-group-item-action.'+ step).classList.add('active');
+
+    document.getElementById('getascii').innerHTML = '';
+    document.getElementById('getremit').innerHTML = '';
+    document.getElementById('getlog').innerHTML = '';
+    document.getElementById('getloglist').innerHTML = '';
   }
 
   async signOff(){
@@ -53,9 +65,11 @@ class Dashboard extends Component {
             <div className="col-4">
               <div className="list-group" id="list-tab" role="tablist">
                 <div className="list-group-item list-group-item-action home active" onClick={()=>this.isActiveToggle('home')}>Home</div>
-                <div className="list-group-item list-group-item-action home claims" onClick={()=>this.isActiveToggle('claims')}>Send Claims</div>
+                <div className="list-group-item list-group-item-action home sendclaims" onClick={()=>this.isActiveToggle('sendclaims')}>Send Claims</div>
+                <div className="list-group-item list-group-item-action home retiveRemittances" onClick={()=>this.isActiveToggle('retiveRemittances')}>Retrieve Remittances</div>
                 <div className="list-group-item list-group-item-action change-password"  onClick={()=>this.isActiveToggle('change-password')}>Change Password</div>
                 <div className="list-group-item list-group-item-action log"  onClick={()=>this.isActiveToggle('log')}>Other Processing + Logs</div>
+                <div className="list-group-item list-group-item-action checkEligibility"  onClick={()=>this.isActiveToggle('checkEligibility')}>Check Eligibility</div>
                 <div className="list-group-item list-group-item-action"  onClick={()=>this.signOff()}>Sign off</div>
               </div>
             </div>
@@ -69,8 +83,16 @@ class Dashboard extends Component {
                   <p>Use the menu at the left to select the service you would like to access</p>
                 </div>
                 
-                <div className="tab-pane" id="claims">
+                <div className="tab-pane" id="sendclaims">
                   <PutRemit/> 
+                    <br/><br/>
+                  <PutAscii/>
+                </div>
+
+                <div className="tab-pane" id="retiveRemittances">
+                  <GetAsciiFile/>
+                    <br/><br/>
+                    <GetRemit/>
                 </div>
 
                 <div className="tab-pane" id="change-password">
@@ -79,6 +101,10 @@ class Dashboard extends Component {
 
                 <div className="tab-pane" id="log">
                   <GetLog/> 
+                </div>
+
+                <div className="tab-pane" id="checkEligibility">
+                  <AcheckE45/>
                 </div>
 
               </div>

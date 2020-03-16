@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import './PutRemit.css';
+import './PutAscii.css';
 import { NODE_APPLICATION_URL } from '../../utils';
 import Loader from '../../container/Loader';
 import axios from 'axios';
 
-class PutRemit extends Component {
+class PutAscii extends Component {
 	
 	constructor() {
 		super();
 		this.state = {
 			ExternalAction: 'AputRemit',
-            submitFile: '',
+            submitASCII: '',
 			res_error: '',
 			loaded: false,
 			errors: {}
@@ -21,7 +21,7 @@ class PutRemit extends Component {
 
 	onFileChangeHandler(e){
         this.setState({
-            submitFile: e.target.files[0]
+            submitASCII: e.target.files[0]
         });
     };
 	
@@ -30,10 +30,10 @@ class PutRemit extends Component {
 		
 		if(this.validateForm()){
 			const data = new FormData() 
-			data.append('submitFile', this.state.submitFile)
-			data.append('ExternalAction', 'AputRemit')
+			data.append('submitASCII', this.state.submitASCII)
+			data.append('ExternalAction', 'submitASCII')
 			
-			axios.post(NODE_APPLICATION_URL+ "/file-upload", data).then(result => {
+			axios.post(NODE_APPLICATION_URL+ "/ascii-upload", data).then(result => {
 				if(result.data.data.Result !== 'SUCCESS'){
 					this.setState({
 						loaded: false,
@@ -53,9 +53,9 @@ class PutRemit extends Component {
 		let errors = {};
 		let formIsValid = true;
   
-		if (!this.state["submitFile"]) {
+		if (!this.state["submitASCII"]) {
 		  formIsValid = false;
-		  errors["submitFile"] = "*Please select your file.";
+		  errors["submitASCII"] = "*Please select your file.";
         }
         
 		this.setState({
@@ -69,7 +69,6 @@ class PutRemit extends Component {
 	  return (
 	  	<div className="row">
 			<div className="col-lg-12">
-				<h4>Send Claims</h4>
 			  	<div className="card">
 			  		<div className="card-body">
 					  	{this.state.res_error &&
@@ -79,13 +78,13 @@ class PutRemit extends Component {
 							<div className="form-group">
 								<label htmlFor="passwordInput">Select file to send</label>
 								<input type="file" className="form-control" onChange={this.onFileChangeHandler}/>
-								<div className="errorMsg">{this.state.errors.submitFile}</div>
+								<div className="errorMsg">{this.state.errors.submitASCII}</div>
 							</div>
 							<button type="submit" className="btn btn-primary" disabled={this.state.loaded}>
 			  				{this.state.loaded &&
 								<Loader/>
 							}
-							Click here to upload Remit</button>
+							Click here to upload Ascii</button>
 						</form>
 					</div>
 				</div>
@@ -95,4 +94,4 @@ class PutRemit extends Component {
 	}
 };
 
-export default PutRemit;
+export default PutAscii;

@@ -1,0 +1,11 @@
+.errorMsg {
+    color: #cc0000;
+    margin-bottom: 12px;
+}
+.birth-date input[type='number'],
+.birth-date input[type='text'],
+.service-date input[type='number'],
+.service-date input[type='text']{
+    width: 30%;
+    display: inline-block;
+}

@@ -1,6 +1,14 @@
 
-//export const NODE_APPLICATION_URL = 'http://localhost:5000';
-export const NODE_APPLICATION_URL = 'https://teleplan.herokuapp.com';
+export const NODE_APPLICATION_URL = 'http://localhost:5000';
+//export const NODE_APPLICATION_URL = 'https://teleplan.herokuapp.com';
+
+export function nl2br(str, is_xhtml) {
+  if (typeof str === 'undefined' || str === null) {
+    return '';
+  }
+  var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br/>' : '<br>';
+  return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}
 
 export function rxAjax(action) {
   const errors = [];
