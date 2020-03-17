@@ -23,7 +23,7 @@ var uploadFile = multer({ storage: storage }).single('submitFile');
 // Ascii upload
 var storageAscii = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/ascii')
+    cb(null, './uploads/log')
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + file.originalname )
@@ -259,8 +259,6 @@ app.post('/file-upload',  function (req, res) {
     });
   })  
 });
-
-
 
 // Ascii Upload
 app.post('/ascii-upload',  function (req, res) {
