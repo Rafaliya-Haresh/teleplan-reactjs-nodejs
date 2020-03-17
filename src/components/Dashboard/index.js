@@ -38,6 +38,7 @@ class Dashboard extends Component {
     document.getElementById('getremit').innerHTML = '';
     document.getElementById('getlog').innerHTML = '';
     document.getElementById('getloglist').innerHTML = '';
+    document.getElementById('checke45').innerHTML = '';
   }
 
   async signOff(){

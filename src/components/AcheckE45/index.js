@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './AcheckE45.css';
-import { rxAjax, NODE_APPLICATION_URL } from '../../utils';
+import { rxAjax, NODE_APPLICATION_URL, nl2br } from '../../utils';
 import Loader from '../../container/Loader';
 
 class AcheckE45 extends Component {
@@ -19,7 +19,8 @@ class AcheckE45 extends Component {
             PatientVisitCharge: false,
             LastEyeExam: false,
             PatientRestriction: false,
-            birthDate: '',
+			birthDate: '',
+			data: '',
 			loaded: false,
 			res_error: '',
 			errors: {}
@@ -29,11 +30,20 @@ class AcheckE45 extends Component {
 		this.handleCheckboxFieldLastEyeExamChange = this.handleCheckboxFieldLastEyeExamChange.bind(this);
 		this.handleCheckboxFieldPatientRestrictionChange = this.handleCheckboxFieldPatientRestrictionChange.bind(this);
 		this.handleFieldChange = this.handleFieldChange.bind(this);
+		this.handleFieldBirthDateChange = this.handleFieldBirthDateChange.bind(this);
+	}
+
+	handleFieldBirthDateChange(event) {
+		const { name, value, maxLength } = event.target;
+    	const message = value.slice(0, maxLength);
+		
+		this.setState({
+		  [name]: message,
+		});
 	}
 
 	handleFieldChange(event) {
 		const { name, value } = event.target;
-		
 		this.setState({
 		  [name]: value,
 		});
@@ -58,6 +68,9 @@ class AcheckE45 extends Component {
 	}
 	
 	async handleCheckE45Submit(e){
+		this.setState({
+			data: ''
+		})
 		e.preventDefault();
 		if(this.validateForm()){
 			const returnData = await rxAjax({
@@ -99,7 +112,10 @@ class AcheckE45 extends Component {
 					PatientRestriction: false
 				});
 			}else{
-				
+				this.setState({
+					loaded: false,
+					data: returnData.data.text
+				});
 			}
 		}else{
 			this.setState({
@@ -114,12 +130,12 @@ class AcheckE45 extends Component {
   
 		if (!this.state["PHN"]) {
 		  formIsValid = false;
-		  errors["PHN"] = "*Please enter your PHN.";
+		  errors["PHN"] = "*Please enter your phone number.";
 		}
   
 		if (!this.state["dateOfBirthyyyy"] || !this.state["dateOfBirthmm"] || !this.state["dateOfBirthdd"]) {
 		  formIsValid = false;
-		  errors["birthDate"] = "*Please enter your Birth Date.";
+		  errors["birthDate"] = "*Please enter your Birth Date YYYY/MM/DD";
 		}
 
 		this.setState({
@@ -142,7 +158,7 @@ class AcheckE45 extends Component {
 								<div className="alert alert-danger" role="alert">{this.state.res_error}</div>
 								}
 								<form onSubmit={this.handleCheckE45Submit}>
-									<input type="hidden" className="form-control" name="ExternalAction" value={this.state.ExternalAction} onChange={this.handleFieldChange} required/>
+									<input type="hidden" className="form-control" name="ExternalAction" value={this.state.ExternalAction}/>
 									<div className="form-group">
 										<label htmlFor="userInput">PHN Number</label>
 										<input type="number" className="form-control" placeholder="Enter Phone Number"  name="PHN" value={this.state.PHN} onChange={this.handleFieldChange}/>
@@ -150,18 +166,18 @@ class AcheckE45 extends Component {
 									</div>
 									<div className="form-group birth-date">
 										<label>Birth Date</label><br/>
-										<input type="number" className="form-control" placeholder="YYYY" name="dateOfBirthyyyy" value={this.state.dateOfBirthyyyy} onChange={this.handleFieldChange}/>/&nbsp;
-                                        <input type="number" className="form-control" placeholder="MM" name="dateOfBirthmm" value={this.state.dateOfBirthmm} onChange={this.handleFieldChange}/>/&nbsp;
-                                        <input type="number" className="form-control" placeholder="DD" name="dateOfBirthdd" value={this.state.dateOfBirthdd} onChange={this.handleFieldChange}/>
+										<input type="number" className="form-control" placeholder="YYYY" name="dateOfBirthyyyy" maxLength="4" value={this.state.dateOfBirthyyyy} onChange={this.handleFieldBirthDateChange}/>/&nbsp;
+                                        <input type="number" className="form-control" placeholder="MM" name="dateOfBirthmm" maxLength="2" value={this.state.dateOfBirthmm} onChange={this.handleFieldBirthDateChange}/>/&nbsp;
+                                        <input type="number" className="form-control" placeholder="DD" name="dateOfBirthdd" maxLength="2" value={this.state.dateOfBirthdd} onChange={this.handleFieldBirthDateChange}/>
 										
                                         <div className="errorMsg">{this.state.errors.birthDate}</div>
 									</div>
 
                                     <div className="form-group service-date">
 										<label>Service Date (YYYY MM DD)</label><br/>
-										<input type="number" className="form-control" placeholder="YYYY" name="dateOfServiceyyyy" value={this.state.dateOfServiceyyyy} onChange={this.handleFieldChange}/>/&nbsp;
-                                        <input type="number" className="form-control" placeholder="MM" name="dateOfServicemm" value={this.state.dateOfServicemm} onChange={this.handleFieldChange}/>/&nbsp;
-                                        <input type="number" className="form-control" placeholder="DD" name="dateOfServicedd" value={this.state.dateOfServicedd} onChange={this.handleFieldChange}/>
+										<input type="number" className="form-control" placeholder="YYYY" name="dateOfServiceyyyy" maxLength="4" value={this.state.dateOfServiceyyyy} onChange={this.handleFieldBirthDateChange}/>/&nbsp;
+                                        <input type="number" className="form-control" placeholder="MM" name="dateOfServicemm" maxLength="2" value={this.state.dateOfServicemm} onChange={this.handleFieldBirthDateChange}/>/&nbsp;
+                                        <input type="number" className="form-control" placeholder="DD" name="dateOfServicedd" maxLength="2" value={this.state.dateOfServicedd} onChange={this.handleFieldBirthDateChange}/>
 									</div>
 									<div className="form-group">
 										<label>
@@ -183,6 +199,7 @@ class AcheckE45 extends Component {
 									Submit</button>
 								</form>
 							</div>
+							<div id="checke45" dangerouslySetInnerHTML={{ __html: nl2br(this.state.data) }} style={{padding: '10px 20px'}}/>
 						</div>
 					</div>
 				</div> 
